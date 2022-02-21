@@ -36,6 +36,23 @@ void q_free(struct list_head *l) {}
  */
 bool q_insert_head(struct list_head *head, char *s)
 {
+    element_t *ele = malloc(sizeof(element_t));
+    if (!ele)
+        return false;
+    /*
+     * Allocated memory size for string must include the end
+     * character '\0', so we need to add 1 here.
+     */
+    size_t s_len = strlen(s) + 1;
+    ele->value = malloc(s_len * sizeof(char));
+    /*
+     * Do not use `strcpy` to copy string because the length of
+     * source string may be larger than the size of buffer (overflow)
+     * Use `strncpy` instead to limit the number of copied
+     * characters.
+     */
+    strncpy(ele->value, s, s_len);
+    list_add(&ele->list, head);
     return true;
 }
 
